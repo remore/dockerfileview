@@ -9,7 +9,7 @@ dockerfileview is a dead simple command line tool to view public Dockerfile. `do
 To install dockerfileview, please use `go get`.
 
 ```
-$ go get github.com/mitchellh/gox
+$ go get github.com/remore/dockerfileview
 ```
 
 If you have not installed go on your system, precompiled executables available at [release page](https://github.com/remore/dockerfileview/releases) is for you.
