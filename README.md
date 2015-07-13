@@ -1,8 +1,36 @@
-# dockerfileview - a public Dockerfile viewer
+# dockerfileview - a Dockerfile viewer to trace ancestry of the base image
 
-dockerfileview is a dead simple command line tool to view public Dockerfile. `dockerfileview` command will display Docerfile of specified base image by parsing `FROM` keyword and fetching Dockerfile again until `FROM scratch` statement is found, to see all the instructions which constructs specified base image.
+dockerfileview is a dead simple command line tool enable you to trace ancestry of the base image. Here is an example.
 
-![rubima wars pic](http://k.swd.cc/dockerfileview/resource/screenshot/example-usage.gif)
+```
+$ dockerfileview nginx:1.9.2
+
+#
+# 🐳  debian:jessie
+# https://raw.githubusercontent.com/tianon/docker-brew-debian/e9bafb113f432c48c7e86c616424cb4b2f2c7a51/jessie/Dockerfile
+#
+
+FROM scratch
+ADD rootfs.tar.xz /
+CMD ["/bin/bash"]
+
+#
+# 🐳  nginx:1.9.2
+# https://raw.githubusercontent.com/nginxinc/docker-nginx/1eea9f7d082dff426e7923a90138de804038266d/Dockerfile
+#
+
+FROM debian:jessie
+
+MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
+
+ .
+ .
+ .
+```
+
+There are tons of useful public docker images such as official images(e.g. `ubuntu:14.04` or `centos:latest`) and personal images hosted at registry.hub.docker.com(e.g. `jwilder/nginx-proxy`), but to download Dockerfiles of those public images are boring and tiresome work. To make matters worse, you sometimes need to trace ancestry to investigate "base image of base image of current image" kind of thing manually. This is where dockerfileview comes in.
+
+![command line example](http://k.swd.cc/dockerfileview/resource/screenshot/example-usage.gif)
 
 ## Installation
 
@@ -12,7 +40,11 @@ To install dockerfileview, please use `go get`.
 $ go get github.com/remore/dockerfileview
 ```
 
-If you have not installed go on your system, precompiled executables available at [release page](https://github.com/remore/dockerfileview/releases) is for you.
+If you have not installed go on your system, precompiled executables are available at [release page](https://github.com/remore/dockerfileview/releases) is for you. Or, simply type `docker run` command such as:
+
+```
+$ docker run remore/dockerfileview dockerfileview ubuntu:14.04
+```
 
 ## Usage
 
