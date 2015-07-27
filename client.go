@@ -23,6 +23,9 @@ func getDockerfile(imageId string) (io.Reader, string, error) {
 				image := strings.Split(scanner.Text(), " ")
 				if image[0] == repository[1]+":" {
 					r := strings.NewReplacer("git://github.com", "https://raw.githubusercontent.com", "@", "/")
+					for len(image[1]) == 0 {
+						image = append(image[:0],image[1:]...)
+					}
 					url = r.Replace(image[1])
 					if len(image) > 2 {
 						url += "/" + image[2] + "/Dockerfile"
